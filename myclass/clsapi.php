@@ -3,13 +3,13 @@ class clsapi
 {
 	function connect(&$conn)
 	{
-		$conn = mysqli_connect("localhost", "root", "", "venture2");
+		$conn = mysqli_connect("localhost:3307", "root", "", "venture");
 		mysqli_set_charset($conn, 'utf8');
 		if (!$conn) {
 			echo "không kết nỗi được";
 			exit();
 		} else {
-			mysqli_select_db($conn, "venture2");
+			mysqli_select_db($conn, "venture");
 			mysqli_query($conn, "SET NAMES UTF8");
 			return $conn;
 		}
@@ -241,5 +241,31 @@ class clsapi
 
 		// Đóng kết nối cơ sở dữ liệu
 		$this->close_kn($conn);
+	}
+	public function conTact_detail($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$sr_no = $row["sr_no"];
+				$address = $row["address"];
+				$gmap = $row["gmap"];
+				$pn1 = $row["pn1"];
+				$pn2 = $row["pn2"];
+				$email = $row["email"];
+				$tw = $row["tw"];
+				$fb = $row["fb"];
+				$insta = $row["insta"];
+				$jframe = $row["jframe"];
+				$dulieu[] = array('sr_no' => $sr_no, 'address' => $address, 'gmap' => $gmap, 'pn1' => $pn1, 'pn2' => $pn2, 'email' => $email, 'tw' => $tw, 'fb' => $fb, 'insta' => $insta, 'jframe' => $jframe);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
 	}
 }
