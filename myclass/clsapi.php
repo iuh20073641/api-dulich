@@ -177,6 +177,59 @@
 				echo json_encode([]);
 			}
 		}
+
+		public function conTact($sql){
+			$link = $this->connect($conn);
+			$ketqua = mysqli_query($link, $sql);
+			$this->close_kn($conn);
+			$i = mysqli_num_rows($ketqua);
+			if ($i > 0) {
+				while ($row = mysqli_fetch_array($ketqua)) {
+					$sr_no = $row["sr_no"];
+					$name = $row["name"];
+					$email = $row["email"];
+					$subject = $row["subject"];
+					$datetime = $row["datetime"];
+					$seen = $row["seen"];
+					$dulieu[] = array('id' => $sr_no, 'name' => $name, 'email' => $email, 'subject' => $subject, 'datetime' => $datetime, 'seen' => $seen);
+				}
+				header("content-Type:application/json; charset=UTF-8");
+				echo json_encode($dulieu);
+			} else {
+				echo "không có kết quả!";
+			}
+		}
+
+		public function add_contact($name, $email, $subject, $message){
+			// Kết nối cơ sở dữ liệu
+			$link = $this->connect($conn);
+
+			// Chuẩn bị câu lệnh SQL
+			$sql = "INSERT INTO user_queries(name, email, subject, message) VALUES (?, ?, ?, ?)";
+			$stmt = mysqli_prepare($link, $sql);
+
+			if ($stmt) {
+				// Liên kết các tham số
+				mysqli_stmt_bind_param($stmt, 'ssss', $name, $email, $subject, $message);
+
+				// Thực thi câu lệnh
+				$result = mysqli_stmt_execute($stmt);
+
+				if ($result) {
+					echo json_encode(['status' => 'success', 'message' => 'Thành công']);
+				} else {
+					echo json_encode(['status' => 'error', 'message' => 'Thất bại: ' . mysqli_stmt_error($stmt)]);
+				}
+
+				// Đóng câu lệnh
+				mysqli_stmt_close($stmt);
+			} else {
+				echo json_encode(['status' => 'error', 'message' => 'Lỗi trong quá trình chuẩn bị câu truy vấn']);
+			}
+
+			// Đóng kết nối cơ sở dữ liệu
+			$this->close_kn($conn);
+		}
 		
     }
 ?>
