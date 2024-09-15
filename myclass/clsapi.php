@@ -1,9 +1,15 @@
 <?php
 class clsapi
 {
+	private $conn;
+
+	public function __construct()
+	{
+		$this->connect($this->conn);
+	}
 	function connect(&$conn)
 	{
-		$conn = mysqli_connect("localhost:3307", "root", "", "venture");
+		$conn = mysqli_connect("localhost", "root", "", "venture", 3307);
 		mysqli_set_charset($conn, 'utf8');
 		if (!$conn) {
 			echo "không kết nỗi được";
@@ -17,7 +23,53 @@ class clsapi
 
 	function close_kn(&$conn)
 	{
-		mysqli_close($conn);
+		if ($conn) {
+			mysqli_close($conn);
+			$conn = null;
+		}
+	}
+
+	public function execute_query($sql, $values = [], $types = null)
+	{
+		// Kiểm tra kết nối
+		if (!$this->conn) {
+			$this->connect($this->conn);
+		}
+
+		// Chuẩn bị câu truy vấn
+		$stmt = mysqli_prepare($this->conn, $sql);
+		if ($stmt) {
+			// Gán tham số cho câu truy vấn
+			if ($types) {
+				mysqli_stmt_bind_param($stmt, $types, ...$values);
+			} else {
+				$types = str_repeat('s', count($values));
+				mysqli_stmt_bind_param($stmt, $types, ...$values);
+			}
+
+			// Thực thi câu truy vấn
+			$result = mysqli_stmt_execute($stmt);
+
+			// Kiểm tra loại câu truy vấn
+			if (stripos($sql, 'SELECT') === 0) {
+				// Truy vấn SELECT: lấy dữ liệu
+				$result = mysqli_stmt_get_result($stmt);
+				$data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+				mysqli_stmt_close($stmt);
+				return $data;
+			} else {
+				// Truy vấn khác: trả về true/false
+				mysqli_stmt_close($stmt);
+				return $result;
+			}
+		}
+		return false;
+	}
+
+	// Thêm phương thức này để lấy kết nối
+	public function get_connection()
+	{
+		return $this->conn;
 	}
 
 	public function xemRoom($sql)
@@ -261,6 +313,30 @@ class clsapi
 				$insta = $row["insta"];
 				$jframe = $row["jframe"];
 				$dulieu[] = array('sr_no' => $sr_no, 'address' => $address, 'gmap' => $gmap, 'pn1' => $pn1, 'pn2' => $pn2, 'email' => $email, 'tw' => $tw, 'fb' => $fb, 'insta' => $insta, 'jframe' => $jframe);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	// Lây danh sách phòng của Admin
+	public function Xemds_Phong($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$name = $row["name"];
+				$area = $row["area"];
+				$adult = $row["adult"];
+				$children = $row["children"];
+				$price = $row["price"];
+				$quantity = $row["quantity"];
+				$dulieu[] = array('id' => $id, 'name' => $name, 'area' => $area, 'adult' => $adult, 'children' => $children, 'price' => $price, 'quantity' => $quantity);
 			}
 			header("content-Type:application/json; charset=UTF-8");
 			echo json_encode($dulieu);
