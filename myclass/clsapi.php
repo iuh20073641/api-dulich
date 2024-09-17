@@ -344,4 +344,44 @@ class clsapi
 			echo "không có kết quả!";
 		}
 	}
+	// Lây danh sách facilities của Admin
+	public function Xemds_Facilities($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$icon = $row["icon"];
+				$name = $row["name"];
+				$description = $row["description"];
+				$dulieu[] = array('id' => $id, 'icon' => $icon, 'name' => $name, 'description' => $description);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	// Lây danh sách facilities của Admin
+	public function Xemds_Features($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$name = $row["name"];
+				$dulieu[] = array('id' => $id, 'name' => $name);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
 }
