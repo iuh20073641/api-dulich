@@ -8,5 +8,5 @@ include("../../myclass/clsapi.php");
 
 $p = new clsapi();
 
-// Truy vấn từ bảng facilities thay vì rooms
+// Truy vấn từ bảng features
 $p->Xemds_Features("SELECT * FROM features ORDER BY id ASC");
