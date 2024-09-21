@@ -384,4 +384,29 @@ class clsapi
 			echo "không có kết quả!";
 		}
 	}
+	// Lây danh sách nguoi dung của Admin
+	public function Xemds_Users($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$name = $row["name"];
+				$email = $row["email"];
+				$phonenum = $row["phonenum"];
+				$address = $row["address"];
+				$dob = $row["dob"];
+				$datetime = $row["datetime"];
+				$profile = $row["profile"];
+				$dulieu[] = array('id' => $id, 'name' => $name, 'email' => $email, 'phonenum' => $phonenum, 'address' => $address, 'dob' => $dob, 'datetime' => $datetime, 'profile' => $profile);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
 }
