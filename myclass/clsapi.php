@@ -1,4 +1,11 @@
 <?php
+
+
+// // Định nghĩa thư mục tải lên
+// define('UPLOAD_IMAGE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/api-dulich-main/api-dulich/api/Images/');
+// define('FACILITIES_FOLDER', 'facilities/');
+
+// echo $_SERVER['DOCUMENT_ROOT'] . '/api-dulich-main/api-dulich/api/Images/' . FACILITIES_FOLDER;
 class clsapi
 {
 	private $conn;
@@ -407,6 +414,40 @@ class clsapi
 			echo json_encode($dulieu);
 		} else {
 			echo "không có kết quả!";
+		}
+	}
+	public function Lay_Setting($sql)
+	{
+		$link = $this->connect($conn); // Sử dụng kết nối đúng (kiểm tra xem $conn có được truyền đúng không)
+		$ketqua = mysqli_query($link, $sql);
+
+		// Kiểm tra kết nối
+		if (!$ketqua) {
+			echo json_encode(['error' => 'Lỗi truy vấn cơ sở dữ liệu!']);
+			return;
+		}
+
+		$this->close_kn($conn); // Đóng kết nối sau khi hoàn thành truy vấn
+
+		$dulieu = []; // Khởi tạo mảng dữ liệu
+		$i = mysqli_num_rows($ketqua);
+
+		if ($i > 0) {
+			// Duyệt qua các dòng kết quả và lưu vào mảng $dulieu
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$dulieu[] = array(
+					'sr_no' => $row["sr_no"],
+					'site_title' => $row["site_title"],
+					'site_about' => $row["site_about"],
+					'shutdown' => $row["shutdown"]
+				);
+			}
+			// Trả về dữ liệu dưới dạng JSON
+			header("Content-Type: application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			// Nếu không có kết quả, trả về JSON báo không có dữ liệu
+			echo json_encode(['message' => 'Không có kết quả!']);
 		}
 	}
 }
