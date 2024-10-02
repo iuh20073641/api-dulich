@@ -1,11 +1,4 @@
 <?php
-
-
-// // Định nghĩa thư mục tải lên
-// define('UPLOAD_IMAGE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/api-dulich-main/api-dulich/api/Images/');
-// define('FACILITIES_FOLDER', 'facilities/');
-
-// echo $_SERVER['DOCUMENT_ROOT'] . '/api-dulich-main/api-dulich/api/Images/' . FACILITIES_FOLDER;
 class clsapi
 {
 	private $conn;
@@ -344,6 +337,35 @@ class clsapi
 				$price = $row["price"];
 				$quantity = $row["quantity"];
 				$dulieu[] = array('id' => $id, 'name' => $name, 'area' => $area, 'adult' => $adult, 'children' => $children, 'price' => $price, 'quantity' => $quantity);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	// Lây danh sách phòng của Admin
+	public function Xemds_Tour($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$name = $row["name"];
+				$price = $row["price"];
+				$description = $row["description"];
+				$status = $row["status"];
+				$removed = $row["removed"];
+				$timetour = $row["timetour"];
+				$depart = $row["depart"];
+				$departurelocation = $row["departurelocation"];
+				$discount = $row["discount"];
+				$itinerary = $row["itinerary"];
+				$vehicle = $row["vehicle"];
+				$dulieu[] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'status' => $status, 'removed' => $removed, 'timetour' => $timetour, 'depart' => $depart, 'departurelocation' => $departurelocation, 'discount' => $discount, 'itinerary' => $itinerary, 'vehicle' => $vehicle);
 			}
 			header("content-Type:application/json; charset=UTF-8");
 			echo json_encode($dulieu);
