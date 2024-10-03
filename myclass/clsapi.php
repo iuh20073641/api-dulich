@@ -344,7 +344,7 @@ class clsapi
 			echo "không có kết quả!";
 		}
 	}
-	// Lây danh sách phòng của Admin
+	// Lây danh sách tour của Admin
 	public function Xemds_Tour($sql)
 	{
 		$link = $this->connect($conn);
@@ -366,6 +366,48 @@ class clsapi
 				$itinerary = $row["itinerary"];
 				$vehicle = $row["vehicle"];
 				$dulieu[] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'status' => $status, 'removed' => $removed, 'timetour' => $timetour, 'depart' => $depart, 'departurelocation' => $departurelocation, 'discount' => $discount, 'itinerary' => $itinerary, 'vehicle' => $vehicle);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	// Lây danh sách carousel của Admin
+	public function Xemds_Carousel($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$sr_no = $row["sr_no"];
+				$image = $row["image"];
+				$dulieu[] = array('sr_no' => $sr_no, 'image' => $image);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	// Lây danh sách facilities của Admin
+	public function Xem_lichtrinhtour($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$id_tour = $row["id_tour"];
+				$date = $row["date"];
+				$image = $row["image"];
+				$schedule = $row["schedule"];
+				$locations = $row["locations"];
+				$dulieu[] = array('id' => $id, 'id_tour' => $id_tour, 'date' => $date, 'image' => $image, 'schedule' => $schedule, 'locations' => $locations);
 			}
 			header("content-Type:application/json; charset=UTF-8");
 			echo json_encode($dulieu);
