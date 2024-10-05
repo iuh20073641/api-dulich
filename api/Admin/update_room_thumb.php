@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, PUT");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 include("../../myclass/clsapi.php");
@@ -10,11 +10,14 @@ include("../../myclass/clsapi.php");
 $p = new clsapi();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Kiểm tra các tham số cần thiết
-    if (isset($_POST['room_id']) && isset($_POST['image_id'])) {
-        $room_id = intval($_POST['room_id']);
-        $image_id = intval($_POST['image_id']);
+    // Đọc và giải mã dữ liệu JSON từ yêu cầu
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
 
+    // Kiểm tra các tham số cần thiết
+    if (isset($data['room_id']) && isset($data['image_id'])) {
+        $room_id = intval($data['room_id']);
+        $image_id = intval($data['image_id']);
 
         // Đặt tất cả các hình ảnh của phòng cụ thể thành không phải thumbnail
         $pre_q = "UPDATE `rooms_images` SET `thumb`=? WHERE `room_id`=?";
@@ -25,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $q = "UPDATE `rooms_images` SET `thumb`=? WHERE `sr_no`=? AND `room_id`=?";
         $v = [1, $image_id, $room_id];
         $res = $p->execute_query($q, $v, 'iii');
-
 
         if ($res) {
             echo json_encode(['status' => 'success', 'message' => 'Thumbnail đã được cập nhật thành công.']);
