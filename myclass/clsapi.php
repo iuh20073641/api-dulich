@@ -392,6 +392,27 @@ class clsapi
 			echo "không có kết quả!";
 		}
 	}
+	// Lây danh sách anh cua phong của Admin
+	public function Xem_Anhroom($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$sr_no = $row["sr_no"];
+				$room_id = $row["room_id"];
+				$image = $row["image"];
+				$thumb = $row["thumb"];
+				$dulieu[] = array('sr_no' => $sr_no, 'room_id' => $room_id, 'image' => $image, 'thumb' => $thumb);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
 	// Lây danh sách facilities của Admin
 	public function Xem_lichtrinhtour($sql)
 	{
