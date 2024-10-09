@@ -501,6 +501,30 @@ class clsapi
 			echo "không có kết quả!";
 		}
 	}
+	// Lây danh sách nhân viên của Admin
+	public function Xemds_nv($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$username = $row["username"];
+				$email = $row["email"];
+				$phoneNumber = $row["phoneNumber"];
+				$address = $row["address"];
+				$role = $row["role"];
+				//$permissions = $row["permissions"];
+				$dulieu[] = array('id' => $id, 'username' => $username, 'email' => $email, 'phoneNumber' => $phoneNumber, 'address' => $address, 'role' => $role);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
 	public function Lay_Setting($sql)
 	{
 		$link = $this->connect($conn); // Sử dụng kết nối đúng (kiểm tra xem $conn có được truyền đúng không)
