@@ -27,25 +27,27 @@ $name_user = $data['name_user'] ?? null;
 $phone = $data['phone'] ?? null;
 $address = $data['address'] ?? null;
 $tour_name = $data['tour_name'] ?? null;
+$total_pay = $data['totalPay'] ?? null;
 $cccd = $data['cccd'] ?? null;
 $customer = $data['customers'] ?? null;
 
-$total_pay = $participant * $price_tour;
+
+$pay = 'Đã thanh toán';
 
 // Kiểm tra các tham số
-if (!$user_id || !$id_tour || !$depar_id || !$participant || !$price_tour || !$name_user || !$phone || !$address || !$tour_name || !$customer || !$cccd) {
+if (!$user_id || !$id_tour || !$depar_id || !$participant || !$price_tour || !$name_user || !$phone || !$address || !$tour_name || !$total_pay || !$customer || !$cccd) {
     echo json_encode(['status' => 'error', 'message' => 'Thiếu hoặc không hợp lệ các tham số.']);
     exit();
 }
 
-
 // Thêm tour mới nếu chưa tồn tại
-$sql_insert = "INSERT INTO booking_order_tour (user_id, tour_id, departure_id, participant) VALUES (?, ?, ?, ?)";
-$values = [$user_id, $id_tour, $depar_id, $participant];
-$result = $p->execute_query($sql_insert, $values);
+$sql_insert = "INSERT INTO booking_order_tour (user_id, tour_id, departure_id, participant, order_id) VALUES (?, ?, ?, ?, ?)";
+$values = [$user_id, $id_tour, $depar_id, $participant, $pay];
+$result = $p->execute_query($sql_insert, $values, 'iiiss');
 
 if ($result) {
     $booking_id = mysqli_insert_id($p->get_connection());
+
     $conn = $p->get_connection(); // Lấy kết nối từ đối tượng $p
     foreach ($data['customers'] as $customer) {
         $name = $conn->real_escape_string($customer['name']);
@@ -59,10 +61,13 @@ if ($result) {
     $query2 = "INSERT INTO `booking_detail_tour`(`booking_id`, `tour_name`, `price`, `total_pay`, `cccd`, `user_name`, `phonenum`, `address`) VALUES (?,?,?,?,?,?,?,?)";
     $details_params = [$booking_id, $tour_name, $price_tour, $total_pay, $cccd, $name_user, $phone, $address];
     $result2 = $p->execute_query($query2, $details_params, 'isssssss');
-}
 
-if ($result2) {
-    echo json_encode(['status' => 'success', 'message' => 'Bạn đã đặt chỗ thành công và bạn cần thanh toán trong vòng 24h.']);
+    if ($result2) {
+        echo json_encode(['status' => 'success', 'message' => 'Bạn đã thanh toán thành công.']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Thanh toán không thành công.']);
+    }
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Đặt chỗ tour không thành công.']);
+    echo json_encode(['status' => 'error', 'message' => 'Thanh toán không thành công.']);
 }
+?>

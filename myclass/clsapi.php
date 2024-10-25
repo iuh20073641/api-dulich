@@ -437,6 +437,7 @@
 				while($row=mysqli_fetch_array($ketqua)){
 						$id = $row["id"];
 						$name = $row["name"];
+						$style = $row["style"];
 						$type = $row["type"];
 						$price = $row["price"];
 						$min_participant = $row["min_participant"];
@@ -449,7 +450,40 @@
 						$discount = $row["discount"];
 						$itinerary = $row["itinerary"];
 		
-						$dulieu[]=array('id'=>$id, 'name'=>$name, 'type'=>$type, 'price'=>$price, 'min_participant'=>$min_participant, 'max_participant'=>$max_participant, 'timeTour'=>$timeTour, 'depart'=>$depart, 
+						$dulieu[]=array('id'=>$id, 'name'=>$name, 'style'=>$style, 'type'=>$type, 'price'=>$price, 'min_participant'=>$min_participant, 'max_participant'=>$max_participant, 'timeTour'=>$timeTour, 'depart'=>$depart, 
+						'departurelocation'=>$departurelocation, 'vehicle'=>$vehicle, 'description'=>$description, 'discount'=>$discount, 
+						'itinerary'=>$itinerary);
+				}
+				header("content-Type:application/json; charset=UTF-8");
+				echo json_encode($dulieu);
+			}else{
+				echo"không có kết quả!";
+			}
+		}
+
+		public function seachTours($sql){
+			$link = $this->connect($conn);
+			$ketqua = mysqli_query($link,$sql);
+			$this->close_kn ($conn);
+			$i = mysqli_num_rows($ketqua);
+			if($i>0){
+				while($row=mysqli_fetch_array($ketqua)){
+						$id = $row["id_tour"];
+						$name = $row["name"];
+						$style = $row["style"];
+						$type = $row["type"];
+						$price = $row["price"];
+						$min_participant = $row["min_participant"];
+						$max_participant = $row["max_participant"];
+						$timeTour = $row["timetour"];
+						$depart = $row["depart"];
+						$departurelocation = $row["departurelocation"];
+						$vehicle = $row["vehicle"];
+						$description = $row["description"];
+						$discount = $row["discount"];
+						$itinerary = $row["itinerary"];
+		
+						$dulieu[]=array('id'=>$id, 'name'=>$name, 'style'=>$style, 'type'=>$type, 'price'=>$price, 'min_participant'=>$min_participant, 'max_participant'=>$max_participant, 'timeTour'=>$timeTour, 'depart'=>$depart, 
 						'departurelocation'=>$departurelocation, 'vehicle'=>$vehicle, 'description'=>$description, 'discount'=>$discount, 
 						'itinerary'=>$itinerary);
 				}
