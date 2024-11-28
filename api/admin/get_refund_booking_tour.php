@@ -16,7 +16,7 @@
     // Thực hiện truy vấn SQL
     $query = "SELECT bo.*, bd.* FROM `booking_order_tour` bo
         INNER JOIN `booking_detail_tour` bd ON bo.booking_id = bd.booking_id
-        WHERE bo.booking_status = 'cancelled' AND bo.refund = 0
+        WHERE bo.refund = 0 OR bo.refund = 1
         AND (bo.order_id LIKE ? OR bd.phonenum LIKE ? OR bd.user_name LIKE ?)
         ORDER BY bo.booking_id DESC";
 

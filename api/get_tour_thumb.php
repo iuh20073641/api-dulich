@@ -9,6 +9,6 @@
 	$tourId = $_REQUEST["tourid"];
 	$p = new clsapi();
 	
-	$p->tourImage("SELECT * FROM tours_images where tour_id=$tourId order by sr_no ASC");
+	$p->tourImage("SELECT * FROM tours_images where tour_id=$tourId and thumb = 1 order by sr_no ASC");
 	
 ?>

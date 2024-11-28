@@ -14,12 +14,12 @@
     $user_name = isset($_GET['user_name']) ? $_GET['user_name'] : '';
 
     // Thực hiện truy vấn SQL
-    $query = "SELECT bo.*, bd.* FROM `booking_order_tour` bo
+    $query = "SELECT bo.*, bd.*, dt.*, t.discount FROM `booking_order_tour` bo
         INNER JOIN `booking_detail_tour` bd ON bo.booking_id = bd.booking_id
         LEFT JOIN `departure_time` dt ON bo.departure_id = dt.id
-        WHERE bo.arrival = 0 AND bo.refund is null
+        LEFT JOIN `tours` t ON bo.tour_id = t.id
         AND (bo.order_id LIKE ? OR bd.phonenum LIKE ? OR bd.user_name LIKE ?)
-        ORDER BY bo.booking_id DESC";
+        ";
 
     // Chuẩn bị và thực thi truy vấn
     $search_param = "%$order_id%";

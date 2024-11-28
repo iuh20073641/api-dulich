@@ -13,6 +13,7 @@ $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
 $amount = $data['amount'];
+// $name = $data['name'];
 // $user_id = $data['user_id'];
 // $id_tour = $data['id_tour'];
 // $depar_id = $data['depar_id'];
@@ -34,7 +35,7 @@ try {
             'price_data' => [
                 'currency' => 'vnd',
                 'product_data' => [
-                    'name' => 'Tour Booking',
+                    'name' => 'thanh toán',
                 ],
                 'unit_amount' => $amount,
             ],

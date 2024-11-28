@@ -6,9 +6,12 @@
 
 	include("../myclass/clsapi.php");
 
-	$tourId = $_REQUEST["tourid"];
+	$id_depart = $_REQUEST[("id_depart")];
 	$p = new clsapi();
 	
-	$p->tourImage("SELECT * FROM tours_images where tour_id=$tourId order by sr_no ASC");
+	$p->vahicleDepartTour("SELECT v.*, dt.day_depar
+                            FROM `vehicle` v
+                            INNER JOIN `departure_time` dt ON v.id_depart = dt.id
+                            WHERE v.id_depart = '$id_depart'");
 	
 ?>
