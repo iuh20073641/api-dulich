@@ -14,10 +14,12 @@
     $user_name = isset($_GET['user_name']) ? $_GET['user_name'] : '';
 
     // Thực hiện truy vấn SQL
-    $query = "SELECT bo.*, bd.* FROM `booking_order_tour` bo
+    $query = "SELECT bo.*, bd.*, dt.* FROM `booking_order_tour` bo
         INNER JOIN `booking_detail_tour` bd ON bo.booking_id = bd.booking_id
+        INNER JOIN `departure_time` dt ON bo.departure_id = dt.id
         WHERE ((bo.booking_status = 'booker' AND bo.arrival = 1) 
         OR (bo.booking_status = 'cancelled' AND bo.refund=1)
+        OR (bo.booking_status = 'cancelled' AND bo.refund=0 AND bo.arrival = 1)
         OR (bo.booking_status = 'payment failed'))
         AND (bo.order_id LIKE ? OR bd.phonenum LIKE ? OR bd.user_name LIKE ?)
         ";

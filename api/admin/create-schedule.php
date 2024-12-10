@@ -25,7 +25,7 @@
     // Kiểm tra các tham số
     if (empty($date) || empty($schedule) || empty($locations) || empty($id_tour)) {
         // http_response_code(400); // Yêu cầu không hợp lệ
-        echo json_encode(['status' => 'error2', 'message' => 'Thiếu hoặc không hợp lệ các tham số.']);
+        echo json_encode(['status' => 'error2', 'message' => 'Thiếu thông tin cần thiết']);
         exit();
     }
 

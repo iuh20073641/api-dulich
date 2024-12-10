@@ -121,6 +121,7 @@
 				echo json_encode([]);
 			}
 		}
+		
 
 		// public function checkClient($sql){
 		// 	$link = $this->connect($conn);
@@ -390,13 +391,40 @@
 		if ($i > 0) {
 			while ($row = mysqli_fetch_array($ketqua)) {
 				$id = $row["id"];
-				$username = $row["username"];
+				$code = $row["username"];
+				$tennhanvien = $row["tennhanvien"];
+				$password = $row["password"];
 				$email = $row["email"];
 				$phoneNumber = $row["phoneNumber"];
 				$address = $row["address"];
 				$role = $row["role"];
 				//$permissions = $row["permissions"];
-				$dulieu[] = array('id' => $id, 'username' => $username, 'email' => $email, 'phoneNumber' => $phoneNumber, 'address' => $address, 'role' => $role);
+				$dulieu[] = array('id' => $id, 'code' => $code, 'staffname' => $tennhanvien, 'password' => $password, 'email' => $email, 'phoneNumber' => $phoneNumber, 'address' => $address, 'role' => $role);
+			}
+			header("content-Type:application/json; charset=UTF-8");
+			echo json_encode($dulieu);
+		} else {
+			echo "không có kết quả!";
+		}
+	}
+	public function Xemds_nv1($sql)
+	{
+		$link = $this->connect($conn);
+		$ketqua = mysqli_query($link, $sql);
+		$this->close_kn($conn);
+		$i = mysqli_num_rows($ketqua);
+		if ($i > 0) {
+			while ($row = mysqli_fetch_array($ketqua)) {
+				$id = $row["id"];
+				$username = $row["username"];
+				$tennhanvien = $row["tennhanvien"];
+				$password = $row["password"];
+				$email = $row["email"];
+				$phoneNumber = $row["phoneNumber"];
+				$address = $row["address"];
+				$role = $row["role"];
+				//$permissions = $row["permissions"];
+				$dulieu[] = array('id' => $id, 'username' => $username, 'tennhanvien' => $tennhanvien, 'password' => $password, 'email' => $email, 'phoneNumber' => $phoneNumber, 'address' => $address, 'role' => $role);
 			}
 			header("content-Type:application/json; charset=UTF-8");
 			echo json_encode($dulieu);
@@ -442,6 +470,8 @@
 						$style = $row["style"];
 						$type = $row["type"];
 						$price = $row["price"];
+						$child_price_percen = $row["child_price_percen"];
+						$toddlers_price_percen = $row["toddlers_price_percen"];
 						$min_participant = $row["min_participant"];
 						$max_participant = $row["max_participant"];
 						$timeTour = $row["timetour"];
@@ -452,7 +482,7 @@
 						$discount = $row["discount"];
 						$itinerary = $row["itinerary"];
 		
-						$dulieu[]=array('id'=>$id, 'name'=>$name, 'style'=>$style, 'type'=>$type, 'price'=>$price, 'min_participant'=>$min_participant, 'max_participant'=>$max_participant, 'timeTour'=>$timeTour, 'depart'=>$depart, 
+						$dulieu[]=array('id'=>$id, 'name'=>$name, 'style'=>$style, 'type'=>$type, 'price'=>$price, 'child_price_percen'=>$child_price_percen, 'toddlers_price_percen'=>$toddlers_price_percen, 'min_participant'=>$min_participant, 'max_participant'=>$max_participant, 'timeTour'=>$timeTour, 'depart'=>$depart, 
 						'departurelocation'=>$departurelocation, 'vehicle'=>$vehicle, 'description'=>$description, 'discount'=>$discount, 
 						'itinerary'=>$itinerary);
 				}
@@ -588,6 +618,33 @@
 						$image_user = $row["profile"];
 		
 						$dulieu[]=array('id'=>$id, 'booking_id'=>$booking_id, 'room_id'=>$room_id, 'user_id'=>$user_id, 'user_name'=>$user_name, 'image_user'=>$image_user, 'rating'=>$rating, 'review'=>$review );
+				}
+				header("content-Type:application/json; charset=UTF-8");
+				echo json_encode($dulieu);
+			}else{
+				echo"không có kết quả!";
+			}
+		}
+
+		public function allRoomRating($sql){
+			$link = $this->connect($conn);
+			$ketqua = mysqli_query($link,$sql);
+			$this->close_kn ($conn);
+			$i = mysqli_num_rows($ketqua);
+			if($i>0){
+				while($row=mysqli_fetch_array($ketqua)){
+						$id = $row["sr_no"];
+						$booking_id = $row["booking_id"];
+						$room_id = $row["room_id"];
+						$room_name = $row["room_name"];
+						$user_id = $row["user_id"];
+						$user_name = $row["user_name"];
+						$rating = $row["rating"];
+						$review = $row["review"];
+						$image_user = $row["profile"];
+						$date = $row["datetime"];
+		
+						$dulieu[]=array('id'=>$id, 'booking_id'=>$booking_id, 'room_id'=>$room_id, 'room_name'=>$room_name, 'user_id'=>$user_id, 'user_name'=>$user_name, 'image_user'=>$image_user, 'rating'=>$rating, 'review'=>$review, 'date'=>$date );
 				}
 				header("content-Type:application/json; charset=UTF-8");
 				echo json_encode($dulieu);
@@ -837,6 +894,47 @@
 				// header("Content-Type: application/json; charset=UTF-8");
 				echo json_encode($dulieu);
 				// echo json_encode(['status' => 'success', 'message' => 'phòng còn trống']);
+			}
+		
+		}
+
+		public function checkBookingTour($sql) {
+			$link = $this->connect($conn);
+			$ketqua = mysqli_query($link,$sql);
+			$this->close_kn ($conn);
+			$i = mysqli_num_rows($ketqua);
+			if($i>0){		
+				while($row=mysqli_fetch_array($ketqua)){
+						$booking_id = $row["booking_id"];
+						$departure_id = $row["departure_id"];
+		
+						$dulieu[]=array('booking_id'=>$booking_id, 'departure_id'=>$departure_id);
+				}
+				header("content-Type:application/json; charset=UTF-8");
+				echo json_encode($dulieu);
+			}else{
+				echo"[]";
+			}
+		
+		}
+
+		public function getAllHdv($sql) {
+			$link = $this->connect($conn);
+			$ketqua = mysqli_query($link,$sql);
+			$this->close_kn ($conn);
+			$i = mysqli_num_rows($ketqua);
+			if($i>0){		
+				while($row=mysqli_fetch_array($ketqua)){
+						$id = $row["id"];
+						$staffName = $row["tennhanvien"];
+						$code = $row["username"];
+		
+						$dulieu[]=array('id'=>$id, 'code'=>$code, 'staffName'=>$staffName);
+				}
+				header("content-Type:application/json; charset=UTF-8");
+				echo json_encode($dulieu);
+			}else{
+				echo"[]";
 			}
 		
 		}

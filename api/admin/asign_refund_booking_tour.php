@@ -47,7 +47,7 @@
 
     if (!$booking_exists) {
         // http_response_code(404); // Not found
-        echo json_encode(['status' => 'error', 'message' => 'Đơn đặt phòng không tồn tại.']);
+        echo json_encode(['status' => 'error', 'message' => 'Đơn đặt tour không tồn tại.']);
         exit();
     }
 
@@ -59,10 +59,10 @@
 
         if ($res) {
             // http_response_code(200); // Success
-            echo json_encode(['status' => 'success', 'message' => 'Đơn đặt phòng đã được hoàn tiền thành công.']);
+            echo json_encode(['status' => 'success', 'message' => 'Đơn đặt tour đã được hoàn tiền thành công.']);
         } else {
             // http_response_code(500); // Server error
-            echo json_encode(['status' => 'error', 'message' => 'Hoàn tiền đơn đặt phòng không thành công.']);
+            echo json_encode(['status' => 'error', 'message' => 'Hoàn tiền đơn đặt tour không thành công.']);
         }
         exit();
     }

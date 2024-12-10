@@ -37,8 +37,9 @@
     }
 
     // Thực hiện truy vấn SQL
-    $query = "SELECT bo.*, bd.* FROM `booking_order_tour` bo
+    $query = "SELECT bo.*, bd.*, dt.* FROM `booking_order_tour` bo
         INNER JOIN `booking_detail_tour` bd ON bo.booking_id = bd.booking_id
+        INNER JOIN `departure_time` dt ON bo.departure_id = dt.id
         WHERE ((bo.booking_status = 'booker') 
         OR (bo.booking_status = 'cancelled')
         OR (bo.booking_status = 'payment failed'))

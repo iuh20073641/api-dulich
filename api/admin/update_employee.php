@@ -22,31 +22,36 @@ error_log(print_r($data, true));
 
 // Lấy dữ liệu từ yêu cầu
 $id = $data['id'] ?? null;
-$username = $data['username'] ?? null;
+$tennhanvien = $data['tennhanvien'] ?? null;
 $password = $data['password'] ?? null;
+$originalPassword = $data['originalPassword'] ?? null; // Thêm tham số originalPassword
 $email = $data['email'] ?? null;
 $phoneNumber = $data['phoneNumber'] ?? null;
 $address = $data['address'] ?? null;
 
 // Kiểm tra các tham số
-if ($id === null || $username === null || $password === null || $email === null || $phoneNumber === null || $address === null) {
+if ($id === null || $tennhanvien === null || $password === null || $originalPassword === null || $email === null || $phoneNumber === null || $address === null) {
     echo json_encode(['status' => 'error', 'message' => 'Thiếu hoặc không hợp lệ các tham số.']);
     exit();
 }
 
 // Mã hóa mật khẩu nếu nó được thay đổi
-$hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+if ($password !== $originalPassword) {
+    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+} else {
+    $hashedPassword = $password;
+}
 
 // Cập nhật thông tin nhân viên
-$sql_update = "UPDATE `employees` SET `username` = ?, `password` = ?, `email` = ?, `phoneNumber` = ?, `address` = ? WHERE `id` = ?";
-$values = [$username, $hashedPassword, $email, $phoneNumber, $address, $id];
+$sql_update = "UPDATE `employees` SET `tennhanvien` = ?, `password` = ?, `email` = ?, `phoneNumber` = ?, `address` = ? WHERE `id` = ?";
+$values = [$tennhanvien, $hashedPassword, $email, $phoneNumber, $address, $id];
 $result = $p->execute_query($sql_update, $values);
 
 if ($result) {
     // Trả về dữ liệu nhân viên đã cập nhật
     $updatedEmployee = [
         'id' => $id,
-        'username' => $username,
+        'tennhanvien' => $tennhanvien,
         'password' => $hashedPassword,
         'email' => $email,
         'phoneNumber' => $phoneNumber,

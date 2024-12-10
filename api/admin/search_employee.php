@@ -18,9 +18,9 @@ if (empty($search_query)) {
 }
 
 // Tìm kiếm nhân viên, loại trừ nhân viên có id là 9
-$sql_search = "SELECT * FROM `employees` WHERE (`username` LIKE ? OR `email` LIKE ? OR `phoneNumber` LIKE ? OR `address` LIKE ? OR `role` LIKE ?) AND `id` != 9";
+$sql_search = "SELECT * FROM `employees` WHERE (`username` LIKE ? OR `tennhanvien` LIKE ? OR `email` LIKE ? OR `phoneNumber` LIKE ? OR `address` LIKE ? OR `role` LIKE ?) AND `id` != 9";
 $search_term = '%' . $search_query . '%';
-$employees = $p->execute_query($sql_search, [$search_term, $search_term, $search_term, $search_term, $search_term]);
+$employees = $p->execute_query($sql_search, [$search_term, $search_term, $search_term, $search_term, $search_term, $search_term]);
 
 if ($employees) {
     http_response_code(200); // Success

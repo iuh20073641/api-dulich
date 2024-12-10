@@ -21,9 +21,10 @@
     $user_name = isset($_GET['user_name']) ? $_GET['user_name'] : '';
 
     // Thực hiện truy vấn SQL
-    $query = "SELECT bo.*, bd.*, t.* FROM `booking_order_tour` bo
+    $query = "SELECT bo.*, bd.*, t.*, ts.* FROM `booking_order_tour` bo
         INNER JOIN `booking_detail_tour` bd ON bo.booking_id = bd.booking_id
         INNER JOIN `departure_time` t ON bo.departure_id = t.id
+        INNER JOIN `tours` ts ON bo.tour_id = ts.id
         WHERE ((bo.booking_status = 'booker' AND bo.arrival = 1) 
         OR (bo.booking_status = 'cancelled' AND bo.refund=1)
         OR (bo.booking_status = 'payment failed'))

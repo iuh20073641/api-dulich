@@ -10,6 +10,6 @@
     $phone = $_REQUEST["phonenum"];
 	$p = new clsapi();
 	
-	$p->checkClient("SELECT id, email, phonenum FROM `user_cred` WHERE `email`='$email' OR `phonenum`='$phone' LIMIT 1");
+	$p->checkClient("SELECT * FROM `user_cred` WHERE `email`='$email' OR `phonenum`='$phone' LIMIT 1");
 	
 ?>

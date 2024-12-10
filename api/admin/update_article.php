@@ -23,9 +23,9 @@ if (
     !empty($data->content) &&
     !empty($data->image) &&
     !empty($data->published_at) &&
-    isset($_GET['id'])
+    isset($_GET['article_id'])
 ) {
-    $id = $_GET['id'];
+    $id = $_GET['article_id'];
     $title = $data->title;
     $summary = $data->summary;
     $content = $data->content;

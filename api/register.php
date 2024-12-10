@@ -73,6 +73,23 @@
 
 		// Đóng câu lệnh
 		$stmt->close();
+	} elseif(!empty($name) && !empty($mail) && !empty($phone) && empty($image) && !empty($address) && !empty($date) && !empty($pass)){
+		$name_image = "avatar-user.jpg";
+		// Chuẩn bị câu truy vấn MySQLi
+		$stmt = $p->get_connection()->prepare("INSERT INTO `user_cred`(`name`, `email`, `address`, `phonenum`, `dob`, `profile`, `password`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+		// Gán giá trị và thực thi câu truy vấn
+		$stmt->bind_param("sssssss", $name, $mail, $address, $phone, $ngayThangMoi, $name_image, $enc_pass);
+		$stmt->execute();
+
+		if ($stmt->affected_rows > 0) {
+			echo json_encode(['status' => 'success', 'message' => 'Người dùng đã được tạo thành công.']);
+		} else {
+			echo json_encode(['status' => 'error', 'message' => 'Không thể tạo người dùng.']);
+		}
+
+		// Đóng câu lệnh
+		$stmt->close();
 	} else {
 		echo json_encode(['status' => 'error', 'message' => 'Thiếu thông tin bắt buộc.']);
 	}

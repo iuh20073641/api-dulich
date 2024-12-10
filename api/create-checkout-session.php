@@ -24,6 +24,7 @@ $amount = $data['amount'];
 // $address = $data['address'];
 // $tour_name = $data['tour_name'];
 $url_success = $data['success_url'];
+$cancel_url = $data['cancel_url'];
 
 
 // $name_tour = $data['name_tour'];
@@ -43,7 +44,7 @@ try {
         ]],
         'mode' => 'payment',
         'success_url' => $url_success,
-        'cancel_url' => 'http://localhost:3000/cancel',
+        'cancel_url' => $cancel_url,
     ]);
 
     echo json_encode(['id' => $session->id]);

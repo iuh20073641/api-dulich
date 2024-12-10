@@ -34,21 +34,34 @@
                 $stmt_check->execute();
                 $result_check = $stmt_check->get_result();
                 $existing_tour_image = $result_check->fetch_assoc();
-                // Xóa file hình ảnh khỏi thư mục
-                $image_path = __DIR__ . '/Images/user/' . $existing_tour_image['profile'];
-                if (file_exists($image_path)) {
-                    unlink($image_path);
-                }
+                if($existing_tour_image['profile'] == "avatar-user.jpg"){
+                    // Update image trên database
+                    $pre_q = "UPDATE `user_cred` SET `profile`=? WHERE `id`=?";
+                    $pre_v = [$image, $user_id];
+                    $pre_res = $p->execute_query($pre_q, $pre_v, 'si');
 
-                // Update image trên database
-                $pre_q = "UPDATE `user_cred` SET `profile`=? WHERE `id`=?";
-                $pre_v = [$image, $user_id];
-                $pre_res = $p->execute_query($pre_q, $pre_v, 'si');
-
-                if ($pre_res) {
-                    echo json_encode(['status' => 'success', 'message' => 'Cập nhật hình ảnh thành công']);
+                    if ($pre_res) {
+                        echo json_encode(['status' => 'success', 'message' => 'Cập nhật hình ảnh thành công']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Cập nhật hình ảnh mới không thành công']);
+                    }
                 } else {
-                    echo json_encode(['status' => 'error', 'message' => 'Cập nhật hình ảnh mới không thành công']);
+                    // Xóa file hình ảnh khỏi thư mục
+                    $image_path = __DIR__ . '/Images/user/' . $existing_tour_image['profile'];
+                    if (file_exists($image_path)) {
+                        unlink($image_path);
+                    }
+
+                    // Update image trên database
+                    $pre_q = "UPDATE `user_cred` SET `profile`=? WHERE `id`=?";
+                    $pre_v = [$image, $user_id];
+                    $pre_res = $p->execute_query($pre_q, $pre_v, 'si');
+
+                    if ($pre_res) {
+                        echo json_encode(['status' => 'success', 'message' => 'Cập nhật hình ảnh thành công']);
+                    } else {
+                        echo json_encode(['status' => 'error', 'message' => 'Cập nhật hình ảnh mới không thành công']);
+                    }
                 }
 
         } else {

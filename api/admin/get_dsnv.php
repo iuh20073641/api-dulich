@@ -9,5 +9,5 @@
     $p = new clsapi();
 
     // Truy vấn từ bảng employees ngoại trừ nhân viên có id là 9
-    $p->Xemds_nv("SELECT * FROM employees WHERE id != 9 ORDER BY id ASC");
+    $p->Xemds_nv1("SELECT * FROM employees WHERE id != 9 ORDER BY id ASC");
 ?>

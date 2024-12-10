@@ -33,7 +33,7 @@ if (strlen($username) < 3 || strlen($password) < 5) {
 }
 
 // Truy vấn thông tin nhân viên từ cơ sở dữ liệu
-$sql_select = "SELECT `id`, `username`, `password`, `role`, `email`, `phoneNumber`, `address` FROM `employees` WHERE `username` = ?";
+$sql_select = "SELECT `id`, `username`, `tennhanvien`, `password`, `role`, `email`, `phoneNumber`, `address` FROM `employees` WHERE `username` = ?";
 $values = [$username];
 $result = $p->execute_query($sql_select, $values);
 
@@ -50,6 +50,7 @@ if ($result && count($result) > 0) {
 				'role' => $employee['role'],
 				'token' => $token,
 				'username' => $employee['username'],
+				'tennhanvien' => $employee['tennhanvien'],
 				'password' => $employee['password'], // Đảm bảo trả về trường password
 				'email' => $employee['email'],
 				'phoneNumber' => $employee['phoneNumber'],
